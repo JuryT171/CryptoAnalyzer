@@ -18,30 +18,78 @@ public class Game2048 extends Game {
         createNewNumber();
     }
 
+
+
+    private void createNewNumber() {
+        boolean isCreated = false;  //  переменная маркер
+        do {
+            int x = getRandomNumber(SIDE);  // переменная с рандомным числом
+            int y = getRandomNumber(SIDE);
+            if (gameField[y][x] == 0) {  //  если поле пустое
+                int randomNumber = getRandomNumber(10);  //переменная с рандомным числом 0-9
+                if (randomNumber < 9) {  // если число 0-9  90%  - значение 2
+                    randomNumber = 2;
+                } else if (randomNumber == 9) {   //если равно 9 то значение 4 (10%)
+                    randomNumber = 4;
+                }
+                gameField[y][x] = randomNumber;  // заносим в поле полученное число
+                isCreated = true;  //
+            }
+        } while (!isCreated); //  завершаем цикл когда все сделано
+    }
+
+    private Color getColorByValue(int value) {   //  метод для присваения цвета в клетку по числу
+        switch (value) {
+            case 0:
+                return Color.WHITE;
+            case 2:
+                return Color.PLUM;
+            case 4:
+                return Color.CYAN;
+            case 8:
+                return Color.GREEN;
+            case 16:
+                return Color.ORANGE;
+            case 32:
+                return Color.PINK;
+            case 64:
+                return Color.RED;
+            case 128:
+                return Color.MAGENTA;
+            case 256:
+                return Color.YELLOW;
+            case 512:
+                return Color.LIGHTGRAY;
+            case 1024:
+                return Color.GRAY;
+            case 2048:
+                return Color.DARKGRAY;
+            default:
+                return Color.NONE;
+        }
+
+    }
+
+    private void setCellColoredNumber(int x, int y, int value) {  // метод для отображения цвета клетки и значения
+        Color cellColor = getColorByValue(value);   // получаем цвет
+        String str; // строковая переменная
+        if (value > 0) {  //  если значение больше 0
+            str = "" + value; //  преобразуем число в строку
+        } else {
+            str = "";  //  иначе пустая строка
+        }
+        setCellValueEx(x, y, cellColor, str);  //  Устанавливаем цвет и строковое значение для клетки
+    }
+
     private void drawScene() {   //  метод для закрашивания поля в определенный цвет
-        for (int x = 0; x < SIDE; x++) {  //  пробегаемся по массиву клеток
-            for (int y = 0; y < SIDE; y++) {
-                setCellColor(x, y, Color.ORANGE);  // закрашиваем в оранжевый
+        for (int y = 0; y < SIDE; y++) {  //  пробегаемся по массиву клеток
+            for (int x = 0; x < SIDE; x++) {
+                int cellValue = gameField[y][x];
+                setCellColoredNumber(x, y,cellValue);  // Вызываем наш метод для отрисовки клетки
             }
         }
     }
-
-    private void createNewNumber() {  // создали метод присваения значения клетки
-        boolean isCreated = false;  // переменная для понимания было ли создано число
-        do {
-            int x = getRandomNumber(SIDE);  // получаем рандомное значение клетки
-            int y = getRandomNumber(SIDE);
-            if (gameField[y][x] == 0) {  //  если ячейка со значением 0
-                int randomNumber = getRandomNumber(10); // переменная для рандомного числа
-                if (randomNumber < 9) {  // если рандомное число меньше 9 (вероятность 90%)
-                    randomNumber = 2;  //  присваиваем значение 2
-                }else if (randomNumber == 9) {  // если рандомное число  9 (вероятность 10%)
-                    randomNumber = 4;   //  присваиваем значение 4
-                }
-                gameField[y][x] = randomNumber;  //  заносим в поле полученное число
-                isCreated = true;  // маркер для завершения цикла
-            }
-        }while(!isCreated); //  повторяем цикл пока значение false, то есть пока число не присвоено
-    }
 }
+
+
 
