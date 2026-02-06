@@ -17,28 +17,78 @@ public class Game2048 extends Game {
         createNewNumber();
         createNewNumber();
     }
+
     @Override
     public void onKeyPress(Key key) {  //  переопределяем метод
         if (key == key.LEFT) {  //  если нажали влево - вызываем метод влево
             moveLeft();
-        } else if(key == key.RIGHT){
+            drawScene();       // перерисовываем игровое поле
+        } else if (key == key.RIGHT) {
             moveRight();
-        }else if (key == key.UP){
+            drawScene();       // перерисовываем игровое поле
+        } else if (key == key.UP) {
             moveUp();
+            drawScene();       // перерисовываем игровое поле
         } else if (key == key.DOWN) {
             moveDown();
+            drawScene();       // перерисовываем игровое поле
+        }
+
+    }
+
+    private void moveLeft() {
+        boolean isNewNumberNeeded = false;  //  переменная маркер
+        for (int[] row : gameField) {  //  перебираем массив
+            boolean wasCompressed = compressRow(row);  //  сдвигаем влево ненулевые элементы
+            boolean wasMerged = mergeRow(row);   //  складываем соседние числа
+            if (wasMerged) {
+                compressRow(row);
+            }
+            if (wasCompressed || wasMerged) {
+                isNewNumberNeeded = true;  // если было движение - ход состоялся
+            }
+        }
+        if (isNewNumberNeeded) {
+            createNewNumber();   // добавляем новую плитку (2 или 4)
         }
     }
 
-    private void moveLeft(){  //  методы выполнения движения
+    private void moveRight() {
+        rotateClockwise();
+        rotateClockwise();
+        moveLeft();
+        rotateClockwise();
+        rotateClockwise();
     }
-    private void moveRight(){
+    private void moveUp() {
+        rotateClockwise();
+        rotateClockwise();
+        rotateClockwise();
+        moveLeft();
+        rotateClockwise();
     }
-    private void moveUp(){
-    }
-    private  void moveDown(){
+    private void moveDown() {
+        rotateClockwise();
+        moveLeft();
+        rotateClockwise();
+        rotateClockwise();
+        rotateClockwise();
     }
 
+    private void rotateClockwise(){
+        int[][] rotated = new int[SIDE][SIDE]; // временная матрица для результата
+
+        for (int y = 0; y < SIDE; y++) {
+            for (int x = 0; x < SIDE; x++) {
+                rotated[x][SIDE - 1 - y] = gameField[y][x]; // переворот
+            }
+        }
+        for (int y = 0; y < SIDE; y++) {
+            for (int x = 0; x < SIDE; x++) {
+                gameField[y][x] = rotated[y][x];  // присваиваем значение новой матрицы
+            }
+        }
+    }
 
     private void createNewNumber() {
         boolean isCreated = false;  //  переменная маркер
