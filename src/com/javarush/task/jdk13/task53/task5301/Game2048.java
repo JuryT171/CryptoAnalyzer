@@ -5,6 +5,7 @@ import com.javarush.engine.cell.*;
 public class Game2048 extends Game {
     private static final int SIDE = 4;   // константа размера игрового поля
     private int gameField[][] = new int[SIDE][SIDE];   // создали массив с ячейками 4*4
+    private boolean isGameStopped = false;
 
     @Override
     public void initialize() {
@@ -60,6 +61,7 @@ public class Game2048 extends Game {
         rotateClockwise();
         rotateClockwise();
     }
+
     private void moveUp() {
         rotateClockwise();
         rotateClockwise();
@@ -67,6 +69,7 @@ public class Game2048 extends Game {
         moveLeft();
         rotateClockwise();
     }
+
     private void moveDown() {
         rotateClockwise();
         moveLeft();
@@ -75,7 +78,7 @@ public class Game2048 extends Game {
         rotateClockwise();
     }
 
-    private void rotateClockwise(){
+    private void rotateClockwise() {
         int[][] rotated = new int[SIDE][SIDE]; // временная матрица для результата
 
         for (int y = 0; y < SIDE; y++) {
@@ -106,6 +109,11 @@ public class Game2048 extends Game {
                 isCreated = true;  //
             }
         } while (!isCreated); //  завершаем цикл когда все сделано
+
+        if (getMaxTileValue() >=2048){  //  если значение 2048 вызываем метод победа
+            win();
+            return;
+        }
     }
 
     private Color getColorByValue(int value) {   //  метод для присваения цвета в клетку по числу
@@ -186,6 +194,22 @@ public class Game2048 extends Game {
             }
         }
         return merged;
+    }
+
+    private int getMaxTileValue() {  //  находим самое большое число 2048
+        int getMaxValue = 0;   // временная переменная
+        for (int x = 0; x < SIDE; x++) {   //  проходимся по массиву
+            for (int y = 0; y < SIDE; y++) {
+                if (gameField[x][y] > getMaxValue) {
+                    getMaxValue = gameField[x][y] ;   //  если значение больше временной переменной - оно ей присваивается
+                }
+            }
+        }
+        return getMaxValue;
+    }
+    private void win(){
+        isGameStopped = true;
+        showMessageDialog(Color.RED,"Ты выйграл!!!",Color.BLUE, 100);
     }
 }
 
