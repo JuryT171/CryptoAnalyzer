@@ -17,7 +17,27 @@ public class Game2048 extends Game {
         createNewNumber();
         createNewNumber();
     }
+    @Override
+    public void onKeyPress(Key key) {  //  переопределяем метод
+        if (key == key.LEFT) {  //  если нажали влево - вызываем метод влево
+            moveLeft();
+        } else if(key == key.RIGHT){
+            moveRight();
+        }else if (key == key.UP){
+            moveUp();
+        } else if (key == key.DOWN) {
+            moveDown();
+        }
+    }
 
+    private void moveLeft(){  //  методы выполнения движения
+    }
+    private void moveRight(){
+    }
+    private void moveUp(){
+    }
+    private  void moveDown(){
+    }
 
 
     private void createNewNumber() {
@@ -85,16 +105,17 @@ public class Game2048 extends Game {
         for (int y = 0; y < SIDE; y++) {  //  пробегаемся по массиву клеток
             for (int x = 0; x < SIDE; x++) {
                 int cellValue = gameField[y][x];
-                setCellColoredNumber(x, y,cellValue);  // Вызываем наш метод для отрисовки клетки
+                setCellColoredNumber(x, y, cellValue);  // Вызываем наш метод для отрисовки клетки
             }
         }
     }
-    private boolean compressRow (int[]row){
+
+    private boolean compressRow(int[] row) {
         int currentIndex = 0; // индекс, куда будет помещен ненулевой элемент
         boolean moved = false; // маркер показывающий, был ли сдвиг
         for (int i = 0; i < row.length; i++) {  //  проходимся по массиву
-            if(row[i] != 0){   // если ячейка не равна 0
-                if (i != currentIndex){  // проверяем не находится ли ненулевой элемент уже на своем месте
+            if (row[i] != 0) {   // если ячейка не равна 0
+                if (i != currentIndex) {  // проверяем не находится ли ненулевой элемент уже на своем месте
                     row[currentIndex] = row[i];  //  перемещаем ненулевое значение
                     row[i] = 0;  //  обнуляем значение, в котором находилось число
                     moved = true;  //  обозначаем что было движение
@@ -103,6 +124,18 @@ public class Game2048 extends Game {
             }
         }
         return moved;
+    }
+
+    private boolean mergeRow(int[] row) {
+        boolean merged = false;  // маркер показывающий было ли наложение плиток
+        for (int i = 0; i < row.length - 1; i++) {   // идем до row.length - 1, так как сравниваем i с i+1
+            if (row[i] != 0 && row[i] == row[i + 1]) {  //  если плитка не равно 0 и равна соседней
+                row[i] = row[i] * 2; //  удваиваем значение
+                row[i + 1] = 0; // правую плитку обнуляем
+                merged = true;  // маркер что плитки слились
+            }
+        }
+        return merged;
     }
 }
 
