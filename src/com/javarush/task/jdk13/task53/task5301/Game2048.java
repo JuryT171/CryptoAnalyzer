@@ -89,6 +89,21 @@ public class Game2048 extends Game {
             }
         }
     }
+    private boolean compressRow (int[]row){
+        int currentIndex = 0; // индекс, куда будет помещен ненулевой элемент
+        boolean moved = false; // маркер показывающий, был ли сдвиг
+        for (int i = 0; i < row.length; i++) {  //  проходимся по массиву
+            if(row[i] != 0){   // если ячейка не равна 0
+                if (i != currentIndex){  // проверяем не находится ли ненулевой элемент уже на своем месте
+                    row[currentIndex] = row[i];  //  перемещаем ненулевое значение
+                    row[i] = 0;  //  обнуляем значение, в котором находилось число
+                    moved = true;  //  обозначаем что было движение
+                }
+                currentIndex++;
+            }
+        }
+        return moved;
+    }
 }
 
 
