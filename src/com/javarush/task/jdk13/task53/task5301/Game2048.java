@@ -110,7 +110,7 @@ public class Game2048 extends Game {
             }
         } while (!isCreated); //  завершаем цикл когда все сделано
 
-        if (getMaxTileValue() >=2048){  //  если значение 2048 вызываем метод победа
+        if (getMaxTileValue() >= 2048) {  //  если значение 2048 вызываем метод победа
             win();
             return;
         }
@@ -201,17 +201,35 @@ public class Game2048 extends Game {
         for (int x = 0; x < SIDE; x++) {   //  проходимся по массиву
             for (int y = 0; y < SIDE; y++) {
                 if (gameField[x][y] > getMaxValue) {
-                    getMaxValue = gameField[x][y] ;   //  если значение больше временной переменной - оно ей присваивается
+                    getMaxValue = gameField[x][y];   //  если значение больше временной переменной - оно ей присваивается
                 }
             }
         }
         return getMaxValue;
     }
-    private void win(){
+
+    private void win() {
         isGameStopped = true;
-        showMessageDialog(Color.RED,"Ты выйграл!!!",Color.BLUE, 100);
+        showMessageDialog(Color.RED, "Ты выйграл!!!", Color.BLUE, 100);
+    }
+
+    private boolean canUserMove() {
+        for (int x = 0; x < SIDE; x++) {   //  проходимся по массиву(полю)
+            for (int y = 0; y < SIDE; y++) {
+                if (gameField[y][x] == 0) {  //  проверка наличия пустых клеток
+                    return true;
+                } else if (y < SIDE - 1 && gameField[y][x] == gameField[y + 1][x]) {  //проверяем на совпадение соседних клеток
+                    return true;
+                } else if (x < SIDE - 1 && gameField[y][x] == gameField[y][x+1]) { //проверяем на совпадение соседних клеток
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
+
+
 
 
 
