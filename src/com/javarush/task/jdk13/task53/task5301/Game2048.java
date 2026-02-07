@@ -20,7 +20,12 @@ public class Game2048 extends Game {
     }
 
     @Override
-    public void onKeyPress(Key key) {  //  переопределяем метод
+    public void onKeyPress(Key key) {//  переопределяем метод
+        if (!canUserMove()){  //  если ход невозможен - игразавершена
+            gameOver();
+            return;
+        }
+
         if (key == key.LEFT) {  //  если нажали влево - вызываем метод влево
             moveLeft();
             drawScene();       // перерисовываем игровое поле
@@ -211,6 +216,11 @@ public class Game2048 extends Game {
     private void win() {
         isGameStopped = true;
         showMessageDialog(Color.RED, "Ты выйграл!!!", Color.BLUE, 100);
+    }
+
+    private void gameOver () {
+        isGameStopped = true;
+        showMessageDialog(Color.RED, "Ты проиграл((", Color.BLUE, 100);
     }
 
     private boolean canUserMove() {
