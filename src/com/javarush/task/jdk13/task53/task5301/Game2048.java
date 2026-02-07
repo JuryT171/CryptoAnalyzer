@@ -6,6 +6,7 @@ public class Game2048 extends Game {
     private static final int SIDE = 4;   // константа размера игрового поля
     private int gameField[][] = new int[SIDE][SIDE];   // создали массив с ячейками 4*4
     private boolean isGameStopped = false;
+    private int score;
 
     @Override
     public void initialize() {
@@ -15,17 +16,33 @@ public class Game2048 extends Game {
     }
 
     private void createGame() {
+        for (int x = 0; x < SIDE; x++) {
+            for (int y = 0; y < SIDE; y++) {
+                gameField [y][x] = 0;  // матрица создается заново с нулями
+            }
+        }
         createNewNumber();
         createNewNumber();
     }
 
     @Override
     public void onKeyPress(Key key) {//  переопределяем метод
+
+        if (isGameStopped){
+           if(key == key.SPACE){  //  если игра остановлена нажатием на пробел
+               isGameStopped = false;
+               score = 0;  //  обнуляем счетчик
+               createGame();  //  делаем рестарт
+               drawScene();
+               setScore(score);
+           }
+            return;
+        }
+
         if (!canUserMove()){  //  если ход невозможен - игразавершена
             gameOver();
             return;
         }
-
         if (key == key.LEFT) {  //  если нажали влево - вызываем метод влево
             moveLeft();
             drawScene();       // перерисовываем игровое поле
@@ -193,9 +210,11 @@ public class Game2048 extends Game {
         boolean merged = false;  // маркер показывающий было ли наложение плиток
         for (int i = 0; i < row.length - 1; i++) {   // идем до row.length - 1, так как сравниваем i с i+1
             if (row[i] != 0 && row[i] == row[i + 1]) {  //  если плитка не равно 0 и равна соседней
+                score = score + row[i]*2; //  увеличиваем очки в графе score
                 row[i] = row[i] * 2; //  удваиваем значение
                 row[i + 1] = 0; // правую плитку обнуляем
                 merged = true;  // маркер что плитки слились
+                setScore(score);
             }
         }
         return merged;
