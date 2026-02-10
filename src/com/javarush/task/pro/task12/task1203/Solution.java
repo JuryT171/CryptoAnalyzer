@@ -10,7 +10,7 @@ public class Solution {
     static int third = 1000;
 
     public static void main(String[] args) {
-        System.out.println(first.equals(second));
+        System.out.println(first.equals(second));  // equals потому что это обьекты
         System.out.println(third == second);
         System.out.println(third == first);
     }
