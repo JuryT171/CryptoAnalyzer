@@ -13,6 +13,7 @@ public class MinesweeperGame extends Game {
     private static final String MINE = "\uD83D\uDCA3"; //  символ мины
     private static final String FLAG = "\uD83D\uDEA9"; //  символ флага
     private boolean isGameStopped;
+    private int countClosedTiles = SIDE*SIDE;
 
     private void openTile(int x, int y) {  //  метод открытия ячейки
         GameObject gameObject = gameField[y][x]; //  получаем объект из ячейки массива
@@ -34,6 +35,12 @@ public class MinesweeperGame extends Game {
             }
         } else {
             setCellNumber(x, y, gameObject.countMineNeighbors);  // если есть мины соседи, отображаем их число
+        }
+        if(gameObject.isOpen){  //  уменьшаем счетчик оставшихся неоткрытых ячеек
+            countClosedTiles--;
+        }
+        if(countClosedTiles == countMinesOnField && !gameObject.isMine){
+            win();  //  если счетчик неоткрытых ячеек равен оставшимся минам и последняя ячейка не мина, ты выйграл
         }
     }
 
@@ -129,5 +136,8 @@ public class MinesweeperGame extends Game {
         isGameStopped = true;
         showMessageDialog(Color.WHITESMOKE, "Ты проиграл!", Color.BLUE, 50);
     }
-
+    private void win(){
+        isGameStopped = true;
+        showMessageDialog(Color.AQUAMARINE,"Ты Выйграл!!", Color.AZURE,50);
+    }
 }
