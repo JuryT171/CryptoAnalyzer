@@ -9,21 +9,57 @@ public class MinesweeperGame extends Game {
     private static final int SIDE = 9;  //  переменная константа задающаая размер поля
     private GameObject gameField[][] = new GameObject[SIDE][SIDE];  //  масиив ячеек
     private int countMinesOnField; //  счетчик мин
+    private int countFlags; //  счетчик флагов
     private static final String MINE = "\uD83D\uDCA3"; //  символ мины
+    private static final String FLAG = "\uD83D\uDEA9"; //  символ флага
 
-    private void openTile(int x, int y){  //  метод открытия ячейки
+    private void openTile(int x, int y) {  //  метод открытия ячейки
         GameObject gameObject = gameField[y][x]; //  получаем объект из ячейки массива
-        if (gameObject.isMine){
-            setCellValue(gameObject.x,gameObject.y,MINE);  // если ячейка заминирована, рисуем мину
-        } else setCellNumber(x,y,gameObject.countMineNeighbors); //иначе показываем колличество соседей заминированных
-        gameObject.isOpen = true; //  отрисовываем ячейку зеленым если она открыта
-        setCellColor(x,y,Color.GREEN);
+        gameObject.isOpen = true; //  помечаем как открытую
+        setCellColor(x, y, Color.GREEN); //  закрашиваем зеленым
+        if (gameObject.isMine) {
+            setCellValue(gameObject.x, gameObject.y, MINE);  // если ячейка заминирована, рисуем мину
+        } else if (gameObject.countMineNeighbors == 0) {  //если нет мин соседей
+            setCellValue(gameObject.x, gameObject.y, ""); // ничего не выводим если нет мин соседей
+            List<GameObject> neighbors = getNeighbors(gameObject); //  получаем список соседей
+            for (GameObject neighbor : neighbors) {  // перебираем соседей
+                if (!neighbor.isOpen) {  // если сосед не открыт
+                    openTile(neighbor.x, neighbor.y);  //  открываем неоткрытые ячейки
+                }
+            }
+        } else {
+            setCellNumber(x, y, gameObject.countMineNeighbors);  // если есть мины соседи, отображаем их число
+        }
+    }
+
+    @Override
+    public void onMouseRightClick(int x, int y) {
+        markTile(x, y);
     }
 
     @Override
     public void onMouseLeftClick(int x, int y) {  //  переопределяем метод
-        openTile(x,y);
+        openTile(x, y);
     }
+
+    private void markTile(int x, int y) {
+        GameObject gameObject = gameField[y][x];  //  извдекаем объект из массива
+        if (gameObject.isOpen || (countFlags == 0 && gameObject.isFlag == false)) {  // если элемент открыт или нет флагов, или элемент не флаг
+            return; //  ничего не возвращаем
+        }
+        if (gameObject.isFlag) {  //  если ячейка помечена флагом
+            countFlags++;  // увеличиваем счетчик
+            gameObject.isFlag = false;  //  снимаем флаг с ячейки
+            setCellValue(x, y, "");  //  очищаем ячейку
+            setCellColor(x, y, Color.ORANGE);  //  возвращаем исходный цвет
+        } else {  //  если ячейка не помечена флагом
+            countFlags--;  //  уменьшаем счетчик
+            gameObject.isFlag = true;  // ставим флаг
+            setCellValue(x, y, FLAG);  // рисуем флаг
+            setCellColor(x, y, Color.YELLOW);  //  открашиваем в желтый
+        }
+    }
+
 
     private void createGame() {  //  создали метод
         for (int x = 0; x < SIDE; x++) {
@@ -37,6 +73,7 @@ public class MinesweeperGame extends Game {
                 setCellColor(x, y, Color.ORANGE);  //  закрасили ячейки
             }
         }
+        countFlags = countMinesOnField;  // счетчик флагов равен счетчику мин
         countMineNeighbors(); //  вызываем метод получения заминированных соседей
     }
 
