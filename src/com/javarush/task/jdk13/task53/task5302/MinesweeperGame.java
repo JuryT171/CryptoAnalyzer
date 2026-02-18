@@ -12,13 +12,18 @@ public class MinesweeperGame extends Game {
     private int countFlags; //  счетчик флагов
     private static final String MINE = "\uD83D\uDCA3"; //  символ мины
     private static final String FLAG = "\uD83D\uDEA9"; //  символ флага
+    private boolean isGameStopped;
 
     private void openTile(int x, int y) {  //  метод открытия ячейки
         GameObject gameObject = gameField[y][x]; //  получаем объект из ячейки массива
+        if (gameObject.isOpen || gameObject.isFlag || isGameStopped == true){
+            return;
+        }
         gameObject.isOpen = true; //  помечаем как открытую
         setCellColor(x, y, Color.GREEN); //  закрашиваем зеленым
         if (gameObject.isMine) {
-            setCellValue(gameObject.x, gameObject.y, MINE);  // если ячейка заминирована, рисуем мину
+            setCellValueEx(gameObject.x, gameObject.y,Color.RED, MINE);  // если ячейка заминирована, рисуем мину
+            gameOver();
         } else if (gameObject.countMineNeighbors == 0) {  //если нет мин соседей
             setCellValue(gameObject.x, gameObject.y, ""); // ничего не выводим если нет мин соседей
             List<GameObject> neighbors = getNeighbors(gameObject); //  получаем список соседей
@@ -44,7 +49,7 @@ public class MinesweeperGame extends Game {
 
     private void markTile(int x, int y) {
         GameObject gameObject = gameField[y][x];  //  извдекаем объект из массива
-        if (gameObject.isOpen || (countFlags == 0 && gameObject.isFlag == false)) {  // если элемент открыт или нет флагов, или элемент не флаг
+        if (gameObject.isOpen || isGameStopped == true || (countFlags == 0 && gameObject.isFlag == false)) {  // если элемент открыт или нет флагов, или элемент не флаг
             return; //  ничего не возвращаем
         }
         if (gameObject.isFlag) {  //  если ячейка помечена флагом
@@ -62,6 +67,7 @@ public class MinesweeperGame extends Game {
 
 
     private void createGame() {  //  создали метод
+        isGameStopped = false;
         for (int x = 0; x < SIDE; x++) {
             for (int y = 0; y < SIDE; y++) { //  прошлись циклом по массиву
                 int randomNumber = getRandomNumber(10); //  генерируем рандом
@@ -117,6 +123,11 @@ public class MinesweeperGame extends Game {
             }
 
         }
+    }
+
+    private void gameOver(){
+        isGameStopped = true;
+        showMessageDialog(Color.WHITESMOKE, "Ты проиграл!", Color.BLUE, 50);
     }
 
 }
