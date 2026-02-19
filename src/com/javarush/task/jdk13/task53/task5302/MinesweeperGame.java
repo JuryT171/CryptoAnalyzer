@@ -56,6 +56,10 @@ public class MinesweeperGame extends Game {
 
     @Override
     public void onMouseLeftClick(int x, int y) {  //  переопределяем метод
+        if(isGameStopped){
+            restart();
+            return;
+        }
         openTile(x, y);
     }
 
@@ -79,7 +83,7 @@ public class MinesweeperGame extends Game {
 
 
     private void createGame() {  //  создали метод
-        isGameStopped = false;
+
         for (int x = 0; x < SIDE; x++) {
             for (int y = 0; y < SIDE; y++) { //  прошлись циклом по массиву
                 int randomNumber = getRandomNumber(10); //  генерируем рандом
@@ -89,6 +93,7 @@ public class MinesweeperGame extends Game {
                 }
                 gameField[y][x] = new GameObject(x, y, isMine);  //  присвоили значения ячейкам
                 setCellColor(x, y, Color.ORANGE);  //  закрасили ячейки
+                setCellValue(x,y,"");
             }
         }
         countFlags = countMinesOnField;  // счетчик флагов равен счетчику мин
@@ -135,6 +140,14 @@ public class MinesweeperGame extends Game {
             }
 
         }
+    }
+    private void restart(){
+        isGameStopped = false;
+        countClosedTiles = SIDE*SIDE;
+        score = 0;
+        setScore(score);
+        countMinesOnField=0;
+        createGame();
     }
 
     private void gameOver(){
