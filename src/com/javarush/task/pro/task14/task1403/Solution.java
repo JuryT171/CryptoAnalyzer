@@ -39,12 +39,12 @@ public class Solution {
                 break;
             }
 
-            int studentId=0;  //  задали значение переменной
+            int studentId;  //  задали значение переменной
             try{  //  исключение
             studentId = Integer.parseInt(input);  }  //  если не целое число
             catch (NumberFormatException e) {  //  ловим ошибку
                 System.out.println(INTEGER_REQUIRED);  //  выводим сообщение
-
+                continue;
             }
 
             try {
