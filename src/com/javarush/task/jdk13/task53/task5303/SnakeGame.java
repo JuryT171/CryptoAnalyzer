@@ -13,13 +13,15 @@ public class SnakeGame extends Game {
     }
 
     private void createGame(){
-        drawScene();  // вызвали метод для открашивания игровой площадки
+        drawScene();
+        Apple apple = new Apple(7,7);  //  создали новый обьект
+        apple.draw(this);
     }
 
     private void drawScene(){
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                setCellColor(x, y, Color.BLUE);  //  закрасили поле с помощью цикла и метода setCellColor
+                setCellColor(x, y, Color.BLUE);
             }
         }
     }
