@@ -15,7 +15,8 @@ public class Solution {
     public static void printStackTrace(StackTraceElement[] stackTrace) {
         //напишите тут ваш код
         for (StackTraceElement printInfo : stackTrace){
-            System.out.printf(OUTPUT_FORMAT, printInfo.getMethodName(), printInfo.getLineNumber(), printInfo.getClassName(), printInfo.getFileName());
+            System.out.printf(OUTPUT_FORMAT,
+                    printInfo.getMethodName(), printInfo.getLineNumber(), printInfo.getClassName(), printInfo.getFileName());
         }
     }
 
