@@ -14,8 +14,6 @@ public class SnakeGame extends Game {
 
     private void createGame(){
         drawScene();
-        Apple apple = new Apple(7,7);  //  создали новый обьект
-        apple.draw(this);
     }
 
     private void drawScene(){
