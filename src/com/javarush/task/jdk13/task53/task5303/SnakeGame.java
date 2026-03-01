@@ -6,6 +6,7 @@ public class SnakeGame extends Game {
     public static final int HEIGHT = 15;  //  константы размера поля
     public static final int WIDTH = 15;
     private Snake snake;
+    private int turnDelay;
 
     @Override
     public void initialize() {    // переопределили метод
@@ -17,6 +18,8 @@ public class SnakeGame extends Game {
         Snake snakeGame = new Snake(WIDTH/2,HEIGHT/2);
         snake = snakeGame;
         drawScene();
+        turnDelay = 300;  //  задали значение переменной
+        setTurnTimer(turnDelay); // вызвали метод со значением
     }
 
     private void drawScene(){
@@ -26,6 +29,12 @@ public class SnakeGame extends Game {
             }
         }
         snake.draw(this);
+    }
+
+    @Override
+    public void onTurn(int step) {  //  переопределяем метод ходьбы..
+        snake.move(); //  запускаем
+        drawScene(); //  перерисовываем поле
     }
 }
 

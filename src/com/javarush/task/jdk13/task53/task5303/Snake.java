@@ -46,5 +46,8 @@ public class Snake {
     public void setDirection(Direction direction) {  //  сеттер для движения змеи
         this.direction = direction;
     }
+    public void move(){
+
+    }
 }
 
