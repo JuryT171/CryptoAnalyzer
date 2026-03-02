@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Snake {
-    private static final String HEAD_SIGN = "\uD83D\uDC7E"; //  константа для хранения смайлика головы змеи
+    private static final String HEAD_SIGN = "\uD83D\uDC06"; //  константа для хранения смайлика головы змеи
     private static final String BODY_SIGN = "\u26AB"; //  константа для смайлика самой змеи
     public boolean isAlive = true;
     private List<GameObject> snakeParts = new ArrayList<>(); //  создали аррайлист для хранения змейки
@@ -44,6 +44,14 @@ public class Snake {
     }
 
     public void setDirection(Direction direction) {  //  сеттер для движения змеи
+        if ((this.direction == Direction.LEFT || this.direction == Direction.RIGHT) && snakeParts.get(0).x == snakeParts.get(1).x) {
+            return;
+        }
+        if ((this.direction == Direction.UP || this.direction == Direction.DOWN) && snakeParts.get(0).y == snakeParts.get(1).y) {
+            return;
+        }
+
+
         if (direction == Direction.UP && this.direction==Direction.DOWN) {
             return;
         } else if (direction == Direction.DOWN && this.direction == Direction.UP) {
@@ -89,6 +97,7 @@ public class Snake {
         }
     }
     public void removeTail(){
+
         snakeParts.remove(snakeParts.size()-1); //  удаляем последний элемент змейки
     }
     public boolean checkCollision(GameObject gameObject){

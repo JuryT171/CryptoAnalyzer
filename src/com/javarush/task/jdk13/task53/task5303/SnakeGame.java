@@ -10,6 +10,7 @@ public class SnakeGame extends Game {
     private int turnDelay;
     private Apple apple ;
     private boolean isGameStopped;
+    private int score;
 
     @Override
     public void initialize() {    // переопределили метод
@@ -27,7 +28,10 @@ public class SnakeGame extends Game {
             snake.setDirection(Direction.UP);
         } else if (key == Key.DOWN) {
             snake.setDirection(Direction.DOWN);
+        } else if (key == Key.SPACE && isGameStopped) {  //  рестарт
+            createGame();
         }
+
     }
 
     private void createGame(){
@@ -37,12 +41,14 @@ public class SnakeGame extends Game {
         createNewApple();
         isGameStopped = false;
         drawScene();
+        score = 0;
+        setScore(score);
     }
 
     private void drawScene(){
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                setCellValueEx(x, y, Color.DARKGOLDENROD,"");
+                setCellValueEx(x, y, Color.DARKGRAY,"");
             }
         }
         snake.draw(this);
@@ -52,6 +58,14 @@ public class SnakeGame extends Game {
     @Override
     public void onTurn(int step) {  //  переопределяем метод ходьбы..
         snake.move(apple); //  запускаем
+        if (!apple.isAlive) { // если яблоко неживое
+            createNewApple();  // создаем новое
+            score += 5; // увеличиваем счет на 5
+            setScore(score); //  вызываем счетчик
+            turnDelay -= 10; //  увеличиваем скорость
+            setTurnTimer(turnDelay);
+        }
+
         if (apple.isAlive==false){  //  если яблоко не живое - создаем новое
             createNewApple();
         }
@@ -64,13 +78,19 @@ public class SnakeGame extends Game {
         }
         drawScene(); //  перерисовываем поле
 
+
+
     }
     private void createNewApple(){
         Apple newApple; //  создаем новый обьект тип Эппл
-        int result1 = getRandomNumber(WIDTH); //  получаем рандомное значение
-        int result2 = getRandomNumber(HEIGHT);
-        newApple = new Apple(result1,result2); //  присваиваем параметры
-        apple=newApple; //  присваиваем ссылку
+       do {
+           int result1 = getRandomNumber(WIDTH); //  получаем рандомное значение
+           int result2 = getRandomNumber(HEIGHT);
+           newApple = new Apple(result1, result2); //  присваиваем параметры
+           apple = newApple; //  присваиваем ссылку
+       }
+
+        while (snake.checkCollision(newApple));  //  устраняем вариант совпадения змеи и яблока
     }
     private void gameOver(){
         stopTurnTimer();
