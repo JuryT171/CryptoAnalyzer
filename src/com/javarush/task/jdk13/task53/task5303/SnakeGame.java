@@ -14,18 +14,31 @@ public class SnakeGame extends Game {
         createGame();
     }
 
+    @Override
+    public void onKeyPress(Key key) {  //  переопределили метод двжения с клавиатуры
+        if (key == Key.LEFT){
+             snake.setDirection(Direction.LEFT);
+        } else if (key == Key.RIGHT) {
+            snake.setDirection(Direction.RIGHT);
+        } else if (key == Key.UP) {
+            snake.setDirection(Direction.UP);
+        } else if (key == Key.DOWN) {
+            snake.setDirection(Direction.DOWN);
+        }
+    }
+
     private void createGame(){
         Snake snakeGame = new Snake(WIDTH/2,HEIGHT/2);
         snake = snakeGame;
         drawScene();
-        turnDelay = 300;  //  задали значение переменной
-        setTurnTimer(turnDelay); // вызвали метод со значением
+        turnDelay = 300;
+        setTurnTimer(turnDelay);
     }
 
     private void drawScene(){
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                setCellColor(x, y, Color.BLUE);
+                setCellValueEx(x, y, Color.DARKGOLDENROD,"");
             }
         }
         snake.draw(this);

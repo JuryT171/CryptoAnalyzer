@@ -44,10 +44,42 @@ public class Snake {
     }
 
     public void setDirection(Direction direction) {  //  сеттер для движения змеи
+        if (direction == Direction.UP && this.direction==Direction.DOWN) { // нельзя менять движение на противоположное
+            return;
+        } else if (direction == Direction.DOWN && this.direction == Direction.UP) {
+            return;
+        } else if (direction == Direction.LEFT && this.direction == Direction.RIGHT) {
+            return;
+        } else if (direction == Direction.RIGHT && this.direction == Direction.LEFT) {
+            return;
+        }
         this.direction = direction;
+
     }
     public void move(){
-
+        GameObject newHead = createNewHead(); // создаем новую голову
+        if(newHead.x >= SnakeGame.WIDTH ||   //  проверяем не вышла ли новая голова за пределы поля
+        newHead.x<0 || newHead.y >= SnakeGame.HEIGHT || newHead.y <0){
+            isAlive=false; //  если вышла, состояние не жива
+            return;
+        }
+        snakeParts.add(0,newHead);  //  добавляем голову, затем удаляем хвост
+        removeTail();
+    }
+    public GameObject createNewHead(){  //  движение змейки
+        GameObject oldHead = snakeParts.get(0); // вычисляем голову
+        if (direction == Direction.LEFT){  //  задаем движение
+            return new GameObject(oldHead.x-1, oldHead.y );
+        } else if (direction == Direction.DOWN) {
+            return new GameObject(oldHead.x, oldHead.y+1);
+        } else if (direction == Direction.RIGHT) {
+            return new GameObject(oldHead.x+1, oldHead.y);
+        }else {
+            return new GameObject(oldHead.x, oldHead.y-1 );
+        }
+    }
+    public void removeTail(){
+        snakeParts.remove(snakeParts.size()-1); //  удаляем последний элемент змейки
     }
 }
 
