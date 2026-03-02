@@ -62,7 +62,7 @@ public class SnakeGame extends Game {
             createNewApple();  // создаем новое
             score += 5; // увеличиваем счет на 5
             setScore(score); //  вызываем счетчик
-            turnDelay -= 10; //  увеличиваем скорость
+            turnDelay -= 2; //  увеличиваем скорость
             setTurnTimer(turnDelay);
         }
 
@@ -95,12 +95,12 @@ public class SnakeGame extends Game {
     private void gameOver(){
         stopTurnTimer();
         isGameStopped = true;
-        showMessageDialog(Color.BLACK,"GAME OVER!!",Color.ANTIQUEWHITE,75 );
+        showMessageDialog(Color.BLACK,"Светочка, ничего страшного"+" " +"\uD83D\uDE1A" +" "+ "ты все равно молодец",Color.ANTIQUEWHITE,25 );
     }
     private void win(){
         stopTurnTimer();
         isGameStopped = true;
-        showMessageDialog(Color.BLACK,"YOU WIN!!!",Color.ANTIQUEWHITE,75 );
+        showMessageDialog(Color.BLACK,"Моя то радость,Света - победитель!!"+ "\uD83D\uDC99"+"\uD83D\uDC99",Color.ANTIQUEWHITE,75 );
     }
 }
 
