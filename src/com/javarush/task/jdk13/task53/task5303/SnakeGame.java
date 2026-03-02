@@ -7,6 +7,7 @@ public class SnakeGame extends Game {
     public static final int WIDTH = 15;
     private Snake snake;
     private int turnDelay;
+    private Apple apple ;
 
     @Override
     public void initialize() {    // переопределили метод
@@ -28,11 +29,11 @@ public class SnakeGame extends Game {
     }
 
     private void createGame(){
-        Snake snakeGame = new Snake(WIDTH/2,HEIGHT/2);
-        snake = snakeGame;
-        drawScene();
         turnDelay = 300;
         setTurnTimer(turnDelay);
+        snake = new Snake(WIDTH/2,HEIGHT/2);
+        createNewApple();
+        drawScene();
     }
 
     private void drawScene(){
@@ -42,12 +43,24 @@ public class SnakeGame extends Game {
             }
         }
         snake.draw(this);
+        apple.draw(this);
     }
 
     @Override
     public void onTurn(int step) {  //  переопределяем метод ходьбы..
-        snake.move(); //  запускаем
+        snake.move(apple); //  запускаем
+        if (apple.isAlive==false){  //  если яблоко не живое - создаем новое
+            createNewApple();
+        }
         drawScene(); //  перерисовываем поле
+
+    }
+    private void createNewApple(){
+        Apple newApple; //  создаем новый обьект тип Эппл
+        int result1 = getRandomNumber(WIDTH); //  получаем рандомное значение
+        int result2 = getRandomNumber(HEIGHT);
+        newApple = new Apple(result1,result2); //  присваиваем параметры
+        apple=newApple; //  присваиваем ссылку
     }
 }
 
