@@ -8,6 +8,7 @@ public class SnakeGame extends Game {
     private Snake snake;
     private int turnDelay;
     private Apple apple ;
+    private boolean isGameStopped;
 
     @Override
     public void initialize() {    // переопределили метод
@@ -33,6 +34,7 @@ public class SnakeGame extends Game {
         setTurnTimer(turnDelay);
         snake = new Snake(WIDTH/2,HEIGHT/2);
         createNewApple();
+        isGameStopped = false;
         drawScene();
     }
 
@@ -52,6 +54,9 @@ public class SnakeGame extends Game {
         if (apple.isAlive==false){  //  если яблоко не живое - создаем новое
             createNewApple();
         }
+        if(snake.isAlive==false){ //  если змея мертва - вызываем метод гейм овер
+            gameOver();
+        }
         drawScene(); //  перерисовываем поле
 
     }
@@ -61,6 +66,11 @@ public class SnakeGame extends Game {
         int result2 = getRandomNumber(HEIGHT);
         newApple = new Apple(result1,result2); //  присваиваем параметры
         apple=newApple; //  присваиваем ссылку
+    }
+    private void gameOver(){
+        stopTurnTimer();
+        isGameStopped = true;
+        showMessageDialog(Color.BLACK,"GAME OVER!!",Color.ANTIQUEWHITE,75 );
     }
 }
 
