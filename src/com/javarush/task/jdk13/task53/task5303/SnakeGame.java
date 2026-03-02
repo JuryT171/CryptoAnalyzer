@@ -5,6 +5,7 @@ import com.javarush.engine.cell.*;
 public class SnakeGame extends Game {
     public static final int HEIGHT = 15;  //  константы размера поля
     public static final int WIDTH = 15;
+    private static final int GOAL = 28;
     private Snake snake;
     private int turnDelay;
     private Apple apple ;
@@ -57,6 +58,10 @@ public class SnakeGame extends Game {
         if(snake.isAlive==false){ //  если змея мертва - вызываем метод гейм овер
             gameOver();
         }
+
+        if (snake.getLength() > GOAL) {  //  если длина змеи больше goal, выйграл
+            win();
+        }
         drawScene(); //  перерисовываем поле
 
     }
@@ -71,6 +76,11 @@ public class SnakeGame extends Game {
         stopTurnTimer();
         isGameStopped = true;
         showMessageDialog(Color.BLACK,"GAME OVER!!",Color.ANTIQUEWHITE,75 );
+    }
+    private void win(){
+        stopTurnTimer();
+        isGameStopped = true;
+        showMessageDialog(Color.BLACK,"YOU WIN!!!",Color.ANTIQUEWHITE,75 );
     }
 }
 
