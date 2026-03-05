@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Solution {
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in);  // сканнер
-             FileOutputStream fos = new FileOutputStream(scanner.nextLine()))  //  создаем для записи в файл,которые принимаем с консоли
+             FileOutputStream fos = new FileOutputStream(scanner.nextLine()))  //  создаем для записи в файл байтов,которые принимаем с консоли
               {
             byte[] bytes = new byte[]{106, 97, 118, 97};  //  массив байтов
             fos.write(bytes);  // записываем массив в файл
