@@ -5,7 +5,7 @@ import com.javarush.engine.cell.*;
 public class SnakeGame extends Game {
     public static final int HEIGHT = 15;  //  константы размера поля
     public static final int WIDTH = 15;
-    private static final int GOAL = 28;
+    private static final int GOAL = 20;
     private Snake snake;
     private int turnDelay;
     private Apple apple ;
@@ -100,7 +100,7 @@ public class SnakeGame extends Game {
     private void win(){
         stopTurnTimer();
         isGameStopped = true;
-        showMessageDialog(Color.BLACK,"Моя то радость,Света - победитель!!"+ "\uD83D\uDC99"+"\uD83D\uDC99",Color.ANTIQUEWHITE,75 );
+        showMessageDialog(Color.BLACK,"Моя то радость,Света - победитель!!"+ "\uD83D\uDC99"+"\uD83D\uDC99",Color.ANTIQUEWHITE,25 );
     }
 }
 

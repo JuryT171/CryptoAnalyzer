@@ -16,7 +16,8 @@ public class Solution {
     }
 
     public static ByteArrayOutputStream writeData(String name, String email, int level, int rating) throws IOException {
-        try {ByteArrayOutputStream fos = new ByteArrayOutputStream();
+        try {
+            ByteArrayOutputStream fos = new ByteArrayOutputStream();
 
             fos.write(("Имя: " + name + "\n").getBytes(StandardCharsets.UTF_8));
             fos.write(("Почта: " + email + "\n").getBytes(StandardCharsets.UTF_8));
