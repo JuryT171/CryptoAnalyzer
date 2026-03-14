@@ -13,5 +13,7 @@ public class Solution {
 
     public static void main(String[] args) {
         //напишите тут ваш код
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyyг. Hч.mмин");
+        System.out.println(dateTimeFormatter.format(localDateTime));
     }
 }
