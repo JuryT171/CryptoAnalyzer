@@ -31,7 +31,6 @@ public class Solution {
         for (LocalDateTime dateTime : dateTimeList) {
             System.out.println(dateTime + ", is weekend - " + isWeekend(dateTime));
         }
-
     }
 
     public static boolean isWeekend(LocalDateTime dateTime) {
@@ -48,7 +47,6 @@ public class Solution {
         } else if (dayOfWeekValue == SUNDAY && hour < WEEKEND_END_SUNDAY_CUT_OFF_HOUR) {
             return true;  //  если воскресенье и время 23.00
         }
-
         return false;
     }
 }
