@@ -8,6 +8,7 @@ import cipherProject.validator.FileValidator;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class CaesarService {
     }
 
 
-    private void process(String inputFail, String outputFile, int key, boolean decryptFlag){
+    public void process(String inputFail, String outputFile, int key, boolean decryptFlag){
         fileValidator.validateForReading(inputFail);  //  проверяем файлы
         fileValidator.validateForWriting(outputFile);
 
