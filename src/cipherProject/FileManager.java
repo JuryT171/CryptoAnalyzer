@@ -20,7 +20,7 @@ public class FileManager {
 
         try {
             Path path = Path.of(fileName);
-            return Files.newBufferedReader(path, StandardCharsets.UTF_8);
+            return Files.newBufferedReader(path, StandardCharsets.UTF_8);  //  испоьзуем буффер для экономии памяти
         } catch (IOException | InvalidPathException e) {
             throw new FileManagerException(e.getMessage(), e);
         }

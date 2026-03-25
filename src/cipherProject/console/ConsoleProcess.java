@@ -9,6 +9,7 @@ import cipherProject.alphabets.RuAlphabet;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ConsoleProcess {
         this.fileManager = new FileManager();
     }
 
-
+//  стартовое меню
     public void start() {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("🔐 Добро пожаловать в программу шифрования Цезаря!");
@@ -78,15 +79,13 @@ public class ConsoleProcess {
         System.out.println("Читаю файл: " + INPUT_FILE);
 
         try {
-            // Запрашиваем данные у пользователя
-
             System.out.print("Введите ключ (целое число): ");
             int key = Integer.parseInt(scanner.nextLine());
 
-            // Выполняем шифрование
+            //  шифровка
             caesarService.enCrypt(INPUT_FILE, ENCRYPT_FILE, key, false);
 
-            System.out.println("Готово! Файл зашифрован.");
+            System.out.println("Готово! Файл зашифрован");
 
         } catch (NumberFormatException e) {
             System.out.println("Ошибка: ключ должен быть числом!");
@@ -105,7 +104,7 @@ public class ConsoleProcess {
             System.out.print("Введите ключ (целое число): ");
             int key = Integer.parseInt(scanner.nextLine());
 
-            // Выполняем расшифровку
+            //  расшифровка
             caesarService.deCrypt(ENCRYPT_FILE, DECRYPT_FILE, key, true);
 
             System.out.println("Готово! Файл расшифрован.");
@@ -119,7 +118,7 @@ public class ConsoleProcess {
         }
     }
 
-    // Подбор ключа
+    //  метод brut force
     private void bruteForce(Scanner scanner) {
         System.out.println("\n--- Подбор ключа ---");
         System.out.println("Читаю зашифрованный файл: " + ENCRYPT_FILE);
@@ -139,61 +138,57 @@ public class ConsoleProcess {
             System.out.println("Начинаю перебор ключей от 0 до " + (alphabetSize - 1));
             System.out.println();
 
-            // Перебираем все ключи
+            // перебираем все ключи в цикле
             for (int key = 0; key < alphabetSize; key++) {
-                System.out.println("=== Ключ " + key + " ===");
+                System.out.println("-- Ключ " + key + " --");
 
-                // Расшифровываем каждую строку
+                // расшифровываем каждую строку
                 CaesarCipher cipher = new CaesarCipher(ruAlphabet);
                 StringBuilder decryptedText = new StringBuilder();
 
                 for (String line : lines) {
                     String decrypted = cipher.deCrypt(line, key);
-                    decryptedText.append(decrypted).append("\n");
+                    decryptedText.append(decrypted).append("\n");  //  конец строки
                     System.out.println(decrypted);
                 }
 
                 System.out.println();
-                System.out.print("Этот текст похож на русский? (да/нет/выход): ");
+                System.out.print("Этот текст расшифрован? (да/нет/выход): ");
                 String answer = scanner.nextLine().toLowerCase();
 
                 switch (answer) {
                     case "да":
                     case "yes":
-                    case "y":
-                        System.out.println("✅ Найден ключ: " + key);
+                        System.out.println("Найден ключ: " + key);
 
-                        // Спрашиваем про сохранение
+                        // спрашиваем про сохранение
                         System.out.print("Сохранить результат в " + DECRYPT_FILE + "? (да/нет): ");
                         String save = scanner.nextLine().toLowerCase();
 
                         if (save.equals("да") || save.equals("yes") || save.equals("y")) {
-                            // Сохраняем в decrypt.txt
-                            try (java.io.BufferedWriter writer = new java.io.BufferedWriter(
-                                    new java.io.FileWriter(DECRYPT_FILE))) {
+                            // сохраняем в decrypt.txt
+                            try (BufferedWriter writer = new BufferedWriter(
+                                    new FileWriter(DECRYPT_FILE))) {
                                 writer.write(decryptedText.toString());
-                                System.out.println("✅ Результат сохранен в: " + DECRYPT_FILE);
+                                System.out.println("Результат сохранен в: " + DECRYPT_FILE);
                             } catch (java.io.IOException e) {
-                                System.out.println("❌ Ошибка при сохранении: " + e.getMessage());
+                                System.out.println("Ошибка при сохранении: " + e.getMessage());
                             }
                         } else {
-                            System.out.println("Результат не сохранен.");
+                            System.out.println("Результат не сохранен");
                         }
                         return;
 
                     case "выход":
                     case "exit":
-                    case "q":
-                        System.out.println("Поиск прерван.");
+                        System.out.println("Поиск прерван");
                         return;
 
                     default:
                         System.out.println("Пробуем следующий ключ...\n");
                 }
             }
-
-            System.out.println("Подходящий ключ не найден.");
-
+            System.out.println("Подходящий ключ не найден");
         } catch (FileManagerException | AlphabetException e) {
             System.out.println("Ошибка: " + e.getMessage());
         } catch (Exception e) {
