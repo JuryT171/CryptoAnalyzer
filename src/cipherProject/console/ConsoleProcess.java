@@ -200,4 +200,4 @@ public class ConsoleProcess {
             System.out.println("Ошибка: " + e.getMessage());
         }
     }
-}/////
+}///
