@@ -30,6 +30,7 @@ public class RuAlphabet {
     }
 
     public int getSize(){  //  размер
+
         return characterList.size();
     }
 

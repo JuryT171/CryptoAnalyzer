@@ -124,7 +124,7 @@ public class ConsoleProcess {
         System.out.println("Читаю зашифрованный файл: " + ENCRYPT_FILE);
 
         try {
-            // Читаем файл encrypt.txt
+            // читаем файл encrypt.txt
             List<String> lines = new ArrayList<>();
             try (BufferedReader reader = fileManager.readFile(ENCRYPT_FILE)) {
                 String line;
@@ -148,7 +148,7 @@ public class ConsoleProcess {
 
                 for (String line : lines) {
                     String decrypted = cipher.deCrypt(line, key);
-                    decryptedText.append(decrypted).append("\n");  //  конец строки
+                    decryptedText.append(decrypted).append("\n");  //  в конец строки
                     System.out.println(decrypted);
                 }
 
@@ -165,7 +165,7 @@ public class ConsoleProcess {
                         System.out.print("Сохранить результат в " + DECRYPT_FILE + "? (да/нет): ");
                         String save = scanner.nextLine().toLowerCase();
 
-                        if (save.equals("да") || save.equals("yes") || save.equals("y")) {
+                        if (save.equals("да") || save.equals("yes")) {
                             // сохраняем в decrypt.txt
                             try (BufferedWriter writer = new BufferedWriter(
                                     new FileWriter(DECRYPT_FILE))) {
