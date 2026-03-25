@@ -2,6 +2,7 @@ package cipherProject;
 
 import cipherProject.exception.FileManagerException;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,11 +16,11 @@ import static java.nio.file.Files.readAllLines;
 public class FileManager {
     // метод для чтения файла
     // сделать метод для работы с большими файлами??
-    public List<String> readFile (String fileName){
+    public BufferedReader readFile (String fileName){
 
-        try{
-            Path path = Path.of(fileName);  //  создаем объект
-            return Files.readAllLines(path);     //  считываем объект с файлом
+        try {
+            Path path = Path.of(fileName);
+            return Files.newBufferedReader(path, StandardCharsets.UTF_8);
         } catch (IOException | InvalidPathException e) {
             throw new FileManagerException(e.getMessage(), e);
         }

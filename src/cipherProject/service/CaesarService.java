@@ -6,6 +6,7 @@ import cipherProject.cipher.CaesarCipher;
 import cipherProject.exception.FileManagerException;
 import cipherProject.validator.FileValidator;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
@@ -24,33 +25,42 @@ public class CaesarService {
     }
 
         //  вызываем их в главном меню
-    public void enCrypt (String inputFail, String outputFile, int key, boolean decryptFlag){
-        process(inputFail,outputFile,key,decryptFlag);
+    public void enCrypt (String inputFile, String outputFile, int key, boolean decryptFlag){
+        process(inputFile,outputFile,key,decryptFlag);
     }
-    public void deCrypt (String inputFail, String outputFile, int key, boolean decryptFlag){
-        process(inputFail,outputFile,key,decryptFlag);
+    public void deCrypt (String inputFile, String outputFile, int key, boolean decryptFlag){
+        process(inputFile,outputFile,key,decryptFlag);
     }
 
 
-    public void process(String inputFail, String outputFile, int key, boolean decryptFlag){
-        fileValidator.validateForReading(inputFail);  //  проверяем файлы
+    public void process(String inputFile, String outputFile, int key, boolean decryptFlag){
+        fileValidator.validateForReading(inputFile);  //  проверяем файлы
         fileValidator.validateForWriting(outputFile);
 
-        List<String>readLines = fileManager.readFile(inputFail);  //  считываем файл
-        List<String>result = new ArrayList<>();
+        try (BufferedReader reader = fileManager.readFile(inputFile);
+             BufferedWriter writer = fileManager.openWriter(outputFile)) {
 
-        for(String s : readLines){  // цикл для считанных строк
-            if (!decryptFlag){  //  если тру, шифруем
-                result.add(caesarCipher.enCrypt(s,key));
-            } else{  //  если не тру, расшифровываем
-              result.add(caesarCipher.deCrypt(s,key));
+            String line;
+            int lineCount = 0;
+
+            // Читаем файл построчно
+            while ((line = reader.readLine()) != null) {
+                String processedLine;
+
+                // Обрабатываем строку в зависимости от флага
+                if (!decryptFlag) {
+                    processedLine = caesarCipher.enCrypt(line, key);
+                } else {
+                    processedLine = caesarCipher.deCrypt(line, key);
+                }
+
+                // Записываем обработанную строку
+                writer.write(processedLine);
+                writer.newLine();
+
+                lineCount++;
             }
-        }
-        try (BufferedWriter bufferedWriter = fileManager.openWriter(outputFile)){
-            for( String s : result) {  //  цикл по считанному, обработанному тексту
-                bufferedWriter.write(s);  //  записываем считанное
-                bufferedWriter.newLine(); //  перенос строки
-            }
+
         } catch (IOException e) {
             throw new FileManagerException("Произошла ошибка записи в файл "+outputFile+e);
         }

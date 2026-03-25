@@ -7,7 +7,9 @@ import cipherProject.exception.FileManagerException;
 import cipherProject.exception.AlphabetException;
 import cipherProject.alphabets.RuAlphabet;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class ConsoleProcess {
     //  при вызове цезарьсервиса егт обернуть в трайкэтч
     private final CaesarService caesarService;
     private final RuAlphabet ruAlphabet;
+    private final FileManager fileManager;
 
     private static final String INPUT_FILE = "src/cipherProject/files/text.txt";
     private static final String ENCRYPT_FILE = "src/cipherProject/files/encrypt.txt";
@@ -25,6 +28,7 @@ public class ConsoleProcess {
     public ConsoleProcess() {
         this.caesarService = new CaesarService();
         this.ruAlphabet = new RuAlphabet();
+        this.fileManager = new FileManager();
     }
 
 
@@ -122,8 +126,13 @@ public class ConsoleProcess {
 
         try {
             // Читаем файл encrypt.txt
-            FileManager fileManager = new FileManager();
-            List<String> lines = fileManager.readFile(ENCRYPT_FILE);
+            List<String> lines = new ArrayList<>();
+            try (BufferedReader reader = fileManager.readFile(ENCRYPT_FILE)) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    lines.add(line);
+                }
+            }
 
             int alphabetSize = ruAlphabet.getSize();
             System.out.println("Размер алфавита: " + alphabetSize);
@@ -186,9 +195,9 @@ public class ConsoleProcess {
             System.out.println("Подходящий ключ не найден.");
 
         } catch (FileManagerException | AlphabetException e) {
-            System.out.println("❌ Ошибка: " + e.getMessage());
+            System.out.println("Ошибка: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("❌ Ошибка: " + e.getMessage());
+            System.out.println("Ошибка: " + e.getMessage());
         }
     }
 }
